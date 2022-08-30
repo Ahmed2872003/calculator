@@ -1,10 +1,11 @@
 #include <iostream>
 #include<stack>
 #include<string>
+#include<math.h>
 using namespace std;
  bool isoperator(char c)
 {
-    if(c == '+' || c == '-' || c == '*' || c == '/')
+    if(c == '+' || c == '-' || c == '*' || c == '/' || c == '^')
         return true;
     return false;
 }
@@ -15,6 +16,8 @@ bool lore(char exp , char top)  // less or equal (priority)
     else if(((exp == '+' || exp == '-') && ((top == '-' || top == '+'))))  // equal order (+,-)
         return true;   
     else if(((exp == '*' || exp == '/') && ((top == '*' || top == '/'))))   // equal order (*,/)
+        return true;
+    else if(exp == '^' && top == '^')
         return true;
     return false;
 }
@@ -41,6 +44,9 @@ int evaluate (int op1 , int op2 , char sign)
             break;
         case '/' : 
             result = op1 / op2;
+            break;
+        case '^' :
+            result = pow(op1 , op2);
             break;
     }
     return result;
@@ -105,7 +111,8 @@ int main() {
             else
             {
                 modify.push(exp[j]);
-                exp[j] = ' '; 
+                exp[j] = ' ';
+
             }
         }
     }
