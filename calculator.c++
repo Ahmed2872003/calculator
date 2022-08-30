@@ -11,13 +11,13 @@ using namespace std;
 }
 bool lore(char exp , char top)  // less or equal (priority)
 {
-    if(((exp == '+' || exp == '-') && (top == '*' || top == '/')))   // less order
+    if(((exp == '+' || exp == '-') && (top == '*' || top == '/' || top == '^')))   // less order
         return true;
     else if(((exp == '+' || exp == '-') && ((top == '-' || top == '+'))))  // equal order (+,-)
         return true;   
     else if(((exp == '*' || exp == '/') && ((top == '*' || top == '/'))))   // equal order (*,/)
         return true;
-    else if(exp == '^' && top == '^')
+    else if((exp == '^' && top == '^') || (exp!= top && top == '^'))
         return true;
     return false;
 }
@@ -121,6 +121,7 @@ int main() {
         exp+=modify.top();
         modify.pop();
     }
+    cout << exp << endl;
         // evaluate expression
 for(int i = 0 ; i < exp.size() ; i++)
 {
@@ -141,6 +142,5 @@ for(int i = 0 ; i < exp.size() ; i++)
     }
 }
 cout << "Answer = " << result << endl;
-    return 0;
+    return 0;       
     }
-
