@@ -1,7 +1,8 @@
-#include<iostream>
+#include <iostream>
 #include<stack>
+#include<string>
 using namespace std;
-bool isoperator(char c)
+ bool isoperator(char c)
 {
     if(c == '+' || c == '-' || c == '*' || c == '/')
         return true;
@@ -17,10 +18,16 @@ bool lore(char exp , char top)  // less or equal (priority)
         return true;
     return false;
 }
-template<class t>
-t evaluate(t op1 , t op2 , char sign)
+void swap(stack<char>& st,string& exp , int index)
 {
-    t result;
+    char temp = exp[index];
+    exp[index] = st.top();
+    st.pop();
+    st.push(temp);
+}
+int evaluate (int op1 , int op2 , char sign)
+{
+    auto result = 0;
     switch(sign)
     {
         case '+' : 
@@ -38,14 +45,7 @@ t evaluate(t op1 , t op2 , char sign)
     }
     return result;
 }
-void swap(stack<char>& st,string& exp , int index)
-{
-    char temp = exp[index];
-    exp[index] = st.top();
-    st.pop();
-    st.push(temp);
-}
-int to_int(string& exp , char c , int& i)
+int to_int (string& exp , int& i)
 {
     int number = 0;
     while(exp[i] >= '0' && exp[i] <= '9')
@@ -56,83 +56,84 @@ int to_int(string& exp , char c , int& i)
     i--;
     return number;
 }
-int main()
-{
+int main() {
+ 
     string exp;
-    stack<char>modify;  
-    stack<float>eval;
-    cout << "Enter expression to be evaluated : ";
+    auto result = 0;
+    stack<char>modify;
+    stack<int>eval;
+    cout << "Enter your expression : ";
     getline(cin,exp);
-    int s = exp.size();
-    float result;
-    // from infix to postfix expression
-    for(int i = 0 ; i < s ; i++)
+    for(int j = 0 ; j < exp.size() ; j++)
     {
-        if(exp[i] == ' ')
-            {exp[i] = '\0';continue;}
-        if(isoperator(exp[i]) || exp[i] == '(' || exp[i] == ')')
+        if(exp[j] == ' ' || exp[j] == '(' || exp[j] == ')')
         {
-            if(exp[i] == '(' || exp[i] == ')' )
-            {
-                modify.push(exp[i]);
-                if(exp[i] == ')')
+            if(exp[j] == '(' || exp[j] == ')')
                 {
-                    string s;
-                    modify.pop();
-                    while(modify.top() != '(')
+                    modify.push(exp[j]);
+                    if(exp[j] == ')')
                     {
-                        s+=modify.top();
                         modify.pop();
+                        string signs;
+                        int c = 0;
+                        while(modify.top()!='(')
+                        {
+                            c++;
+                            signs+=modify.top();
+                            modify.pop();
+                        }
+                        modify.pop();
+                        exp.insert(j , signs);
+                        j+=c;
                     }
-                    modify.pop();
-                    exp.insert(i,s);
                 }
+                    exp.erase(j , 1);
+                    j--;
+
+        }
+        else if(isoperator(exp[j]))
+        {
+            if(modify.empty())
+            {
+                modify.push(exp[j]);
+                exp[j] = ' ';
             }
-            else if(modify.empty())
-                {modify.push(exp[i]);exp[i] = ' ';}
+            else if(lore(exp[j] , modify.top()))
+            {
+                swap(modify , exp , j);
+            }
             else
             {
-                if(modify.top() == '(')
-                    {modify.push(exp[i]);exp[i] = ' ';}
-                else if(lore(exp[i],modify.top()))
-                    {
-                        swap(modify,exp,i);
-                    }
-                else
-                {
-                    modify.push(exp[i]);
-                    exp[i] = ' ';
-                }
+                modify.push(exp[j]);
+                exp[j] = ' '; 
             }
         }
     }
-    //  End of postfix
-
-    // add last oprators if it's
-    while(!modify.empty()) // O(n)
+    while(!modify.empty()) 
     {
         exp+=modify.top();
         modify.pop();
     }
-    // evaluate values
-    for(int i = 0 ; i < exp.size() ; i++)
+        // evaluate expression
+for(int i = 0 ; i < exp.size() ; i++)
+{
+    if(exp[i] == ' ')
+        continue;
+    if(isoperator(exp[i]))
     {
-        if(exp[i] == '\0' ||  exp[i] == ' '  || exp[i] == '(' || exp[i] == ')' )
-            continue;
-        if(isoperator(exp[i]))
-        {
-            float operand2 = eval.top();
-            eval.pop();
-            float operand1 = eval.top();
-            eval.pop();
-            result = evaluate(operand1 , operand2 , exp[i]);
-            eval.push(result);
-        }
-        else
-        {
-            eval.push(to_int(exp , exp[i] , i));
-        }
+        int operand2 = eval.top();
+        eval.pop();
+        int operand1 = eval.top();
+        eval.pop();
+        result = evaluate(operand1 , operand2 , exp[i]);
+        eval.push(result);
     }
-    cout << "Answer = " << result << endl;
-    return 0;
+    else
+    {
+        eval.push(to_int(exp , i));
+    }
 }
+cout << "Answer = " << result << endl;
+    return 0;
+    }
+
