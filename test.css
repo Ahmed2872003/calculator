@@ -1,0 +1,78 @@
+body {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.calc {
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  margin-top: 150px;
+  background-color: #efefef;
+  padding: 10px;
+  gap: 20px;
+}
+#show {
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 700;
+  background-color: #0080009b;
+  width: 260px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 30px;
+  white-space: nowrap;
+  overflow: scroll hidden;
+}
+#show::-webkit-scrollbar {
+  height: 5px;
+}
+
+#show::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #0080009b;
+}
+
+#show::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(0 0 0 / 0.7);
+}
+#show::-webkit-scrollbar-thumb:hover {
+  background-color: black;
+}
+.btns {
+  display: flex;
+  gap: 10px;
+}
+.btns_num {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btns_num:hover {
+  background-color: #e6e6e6;
+}
+#numbers {
+  display: grid;
+  grid-template-rows: repeat(4, 50px);
+  grid-template-columns: repeat(3, 50px);
+  gap: 10px;
+}
+
+.operators {
+  display: grid;
+  grid-template-columns: repeat(2, 50px);
+  grid-template-rows: repeat(4, 50px);
+  gap: 10px;
+}
+.special {
+  grid-column-start: 2;
+  grid-row-start: 3;
+  grid-row-end: 5;
+}
